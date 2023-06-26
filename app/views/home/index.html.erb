@@ -1,0 +1,40 @@
+<div class="container-fluid">
+    <div class="row">
+    
+    <% unless user_signed_in? %>
+      <%= link_to 'Inicia sesión', new_user_session_path %>
+    <% end %>
+    
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <h1>App de rifas</h1>
+
+            <p>Aquí podrás ver las boletas de la rifa: las tuyas, las ocupadas y las libres.</p>
+            <p>Para que te asignen una, habla con Santiago</p>
+        </div>
+    </div>
+    <div class="row">
+        <%@tickets.each_with_index do |ticket,index|%>
+            <% if index % 10 == 0 %>
+                <div class="col-sm-1"></div>
+            <% end %>
+            <div class="col-sm-1 d-grid gap-2">
+                <%if can? :edit, ticket%>
+                    <%=link_to ticket.id, edit_ticket_path(ticket), class: "btn #{ticket_color_button(ticket)}"%>
+                <%elsif can? :read, ticket%>
+                    <%=link_to ticket.id, ticket, class: "btn btn-warning" %>
+                <% elsif can? :see, ticket %>
+                    <button class="btn <%=ticket_color_button(ticket)%>">
+                        <%= ticket.id%>
+                    </button>
+                <% end %>
+            </div>
+            <% if index % 10 == 9 %>
+                <div class="col-sm-1"></div>
+            <% end %>
+        <%end%>
+    </div>
+</div>
+
+
